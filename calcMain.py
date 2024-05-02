@@ -77,7 +77,7 @@ print('Digite os valores da segunda matriz:')
 matriz2 = criar_matriz(linhas2, colunas2)
 
 # Solicita ao usuário a operação desejada
-operacao = input('Digite a operação desejada (soma/subtração/multiplicação): ')
+operacao = input('Digite a operação desejada (soma, subtração ou multiplicação): ')
 
 # Executa a operação escolhida e imprime o resultado
 if operacao.lower() == 'soma' or operacao == '+':
