@@ -43,28 +43,49 @@ def subtrair_matrizes(matrizes):
     # Retorna a matriz resultado
     return resultado
 
-# Solicita ao usuário o número de matrizes
-num_matrizes = int(input('Digite o número de matrizes que deseja somar/subtrair: '))
-# Solicita ao usuário o número de linhas e colunas para as matrizes
-linhas = int(input('Digite o número de linhas das matrizes: '))
-colunas = int(input('Digite o número de colunas das matrizes: '))
+def multiplicar_matrizes(matriz1, matriz2):
+    # Verifica se o número de colunas da primeira matriz é igual ao número de linhas da segunda matriz
+    if len(matriz1[0]) != len(matriz2):
+        print('Não é possível multiplicar as matrizes. O número de colunas da primeira matriz deve ser igual ao número de linhas da segunda matriz.')
+        return None
 
-# Inicializa uma lista vazia para armazenar as matrizes
-matrizes = []
-# Para cada matriz
-for _ in range(num_matrizes):
-    print(f'Digite os valores da matriz {_ + 1}:')
-    matriz = criar_matriz(linhas, colunas)
-    matrizes.append(matriz)
+    # Inicializa a matriz resultado com zeros
+    resultado = [[0 for _ in range(len(matriz2[0]))] for _ in range(len(matriz1))]
+
+    # Multiplica as matrizes
+    for i in range(len(matriz1)):
+        for j in range(len(matriz2[0])):
+            for k in range(len(matriz2)):
+                resultado[i][j] += matriz1[i][k] * matriz2[k][j]
+
+    return resultado
+
+# Solicita ao usuário o número de linhas e colunas para a primeira matriz
+linhas1 = int(input('Digite o número de linhas da primeira matriz: '))
+colunas1 = int(input('Digite o número de colunas da primeira matriz: '))
+
+# Cria a primeira matriz
+print('Digite os valores da primeira matriz:')
+matriz1 = criar_matriz(linhas1, colunas1)
+
+# Solicita ao usuário o número de linhas e colunas para a segunda matriz
+linhas2 = int(input('Digite o número de linhas da segunda matriz: '))
+colunas2 = int(input('Digite o número de colunas da segunda matriz: '))
+
+# Cria a segunda matriz
+print('Digite os valores da segunda matriz:')
+matriz2 = criar_matriz(linhas2, colunas2)
 
 # Solicita ao usuário a operação desejada
-operacao = input('Digite a operação desejada (soma/subtração): ')
+operacao = input('Digite a operação desejada (soma/subtração/multiplicação): ')
 
-# Executa a operação de soma ou subtração e imprime o resultado
+# Executa a operação escolhida e imprime o resultado
 if operacao.lower() == 'soma' or operacao == '+':
-    resultado = somar_matrizes(matrizes)
+    resultado = somar_matrizes([matriz1, matriz2])
 elif operacao.lower() == 'subtração' or operacao == '-':
-    resultado = subtrair_matrizes(matrizes)
+    resultado = subtrair_matrizes([matriz1, matriz2])
+elif operacao.lower() == 'multiplicação' or operacao.lower() == 'multiplicacao' or operacao == '*':
+    resultado = multiplicar_matrizes(matriz1, matriz2)
 else:
     print('Operação inválida!')
     resultado = None
