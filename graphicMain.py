@@ -88,9 +88,14 @@ class CalculadoraMatrizes(tk.Tk):
 
     def calcular(self):
         # Verifica se as matrizes têm tamanhos compatíveis para a operação escolhida
-        if self.operacao_var.get() == "multiplicação" and self.colunas_matriz1 != self.linhas_matriz2:
-            messagebox.showerror("Erro", "O número de colunas da primeira matriz deve ser igual ao número de linhas da segunda matriz.")
-            return
+        if self.operacao_var.get() == "multiplicação":
+            if self.colunas_matriz1 != self.linhas_matriz2:
+                messagebox.showerror("Erro", "O número de colunas da primeira matriz deve ser igual ao número de linhas da segunda matriz para realizar a multiplicação.")
+                return
+        else:
+            if self.linhas_matriz1 != self.linhas_matriz2 or self.colunas_matriz1 != self.colunas_matriz2:
+                messagebox.showerror("Erro", "As matrizes devem ter o mesmo tamanho para realizar esta operação.")
+                return
 
         # Realiza a operação selecionada e exibe o resultado
         if self.operacao_var.get() == "soma":
