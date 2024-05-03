@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+from tkinter import ttk
 
 class CalculadoraMatrizes(tk.Tk):
     def __init__(self):
@@ -16,19 +17,20 @@ class CalculadoraMatrizes(tk.Tk):
         self.colunas_matriz2 = None
         self.valores_matriz2 = None
 
-        self.operacao = None
+        self.operacao_var = tk.StringVar(self)
+        self.operacao_var.set("soma")  # Valor padrão
 
         # Criação dos widgets da interface
         self.criar_widgets()
 
     def criar_widgets(self):
         # Escolher o tamanho da matriz 1
-        tk.Label(self, text="Tamanho da Matriz 1").pack()
-        self.entr_linhas1 = tk.Entry(self, width=5)
+        ttk.Label(self, text="Tamanho da Matriz 1").pack()
+        self.entr_linhas1 = ttk.Entry(self, width=5)
         self.entr_linhas1.pack()
-        self.entr_colunas1 = tk.Entry(self, width=5)
+        self.entr_colunas1 = ttk.Entry(self, width=5)
         self.entr_colunas1.pack()
-        tk.Button(self, text="Confirmar", command=self.definir_tamanho_matriz1).pack()
+        ttk.Button(self, text="Confirmar", command=self.definir_tamanho_matriz1).pack()
 
     def definir_tamanho_matriz1(self):
         # Define o tamanho da matriz 1 com base nos valores inseridos pelo usuário
@@ -38,19 +40,19 @@ class CalculadoraMatrizes(tk.Tk):
 
         # Interface para inserir os valores da matriz 1
         self.limpar_widgets()
-        tk.Label(self, text="Insira os valores da Matriz 1").pack()
+        ttk.Label(self, text="Insira os valores da Matriz 1").pack()
         self.criar_campos_matriz(self.valores_matriz1)
 
-        tk.Button(self, text="Próximo", command=self.definir_tamanho_matriz2).pack()
+        ttk.Button(self, text="Próximo", command=self.definir_tamanho_matriz2).pack()
 
     def definir_tamanho_matriz2(self):
         # Escolher o tamanho da matriz 2
-        tk.Label(self, text="Tamanho da Matriz 2").pack()
-        self.entr_linhas2 = tk.Entry(self, width=5)
+        ttk.Label(self, text="Tamanho da Matriz 2").pack()
+        self.entr_linhas2 = ttk.Entry(self, width=5)
         self.entr_linhas2.pack()
-        self.entr_colunas2 = tk.Entry(self, width=5)
+        self.entr_colunas2 = ttk.Entry(self, width=5)
         self.entr_colunas2.pack()
-        tk.Button(self, text="Confirmar", command=self.definir_valores_matriz2).pack()
+        ttk.Button(self, text="Confirmar", command=self.definir_valores_matriz2).pack()
 
     def definir_valores_matriz2(self):
         # Define o tamanho da matriz 2 com base nos valores inseridos pelo usuário
@@ -60,53 +62,51 @@ class CalculadoraMatrizes(tk.Tk):
 
         # Interface para inserir os valores da matriz 2
         self.limpar_widgets()
-        tk.Label(self, text="Insira os valores da Matriz 2").pack()
+        ttk.Label(self, text="Insira os valores da Matriz 2").pack()
         self.criar_campos_matriz(self.valores_matriz2)
 
-        tk.Button(self, text="Próximo", command=self.escolher_operacao).pack()
+        ttk.Button(self, text="Próximo", command=self.escolher_operacao).pack()
 
     def criar_campos_matriz(self, valores_matriz):
         # Cria campos de entrada para os valores da matriz
         for i in range(len(valores_matriz)):
-            frame_linha = tk.Frame(self)
+            frame_linha = ttk.Frame(self)
             frame_linha.pack()
             for j in range(len(valores_matriz[0])):
-                entry = tk.Entry(frame_linha, width=5)
+                entry = ttk.Entry(frame_linha, width=5)
                 entry.pack(side=tk.LEFT)
                 valores_matriz[i][j] = entry
 
     def escolher_operacao(self):
         # Escolher a operação a ser realizada
         self.limpar_widgets()
-        tk.Label(self, text="Escolha a operação:").pack()
-        self.operacao = tk.StringVar(self)
-        self.operacao.set("soma")  # Valor padrão
+        ttk.Label(self, text="Escolha a operação:").pack()
         operacoes = ["soma", "subtração", "multiplicação"]
-        tk.OptionMenu(self, self.operacao, *operacoes).pack()
+        ttk.OptionMenu(self, self.operacao_var, self.operacao_var.get(), *operacoes).pack()
 
-        tk.Button(self, text="Calcular", command=self.calcular).pack()
+        ttk.Button(self, text="Calcular", command=self.calcular).pack()
 
     def calcular(self):
         # Verifica se as matrizes têm tamanhos compatíveis para a operação escolhida
         if self.linhas_matriz1 != self.linhas_matriz2 or self.colunas_matriz1 != self.colunas_matriz2:
-            tk.messagebox.showerror("Erro", "As matrizes devem ter o mesmo tamanho para realizar esta operação.")
+            messagebox.showerror("Erro", "As matrizes devem ter o mesmo tamanho para realizar esta operação.")
             return
 
         # Realiza a operação selecionada e exibe o resultado
-        if self.operacao.get() == "soma":
+        if self.operacao_var.get() == "soma":
             resultado = self.somar_matrizes()
-        elif self.operacao.get() == "subtração":
+        elif self.operacao_var.get() == "subtração":
             resultado = self.subtrair_matrizes()
-        elif self.operacao.get() == "multiplicação":
+        elif self.operacao_var.get() == "multiplicação":
             resultado = self.multiplicar_matrizes()
         else:
             resultado = None
 
         if resultado:
             self.limpar_widgets()
-            tk.Label(self, text="Resultado:").pack()
+            ttk.Label(self, text="Resultado:").pack()
             for linha in resultado:
-                tk.Label(self, text=linha).pack()
+                ttk.Label(self, text=linha, foreground="green").pack()
 
     def somar_matrizes(self):
         # Realiza a soma das matrizes
