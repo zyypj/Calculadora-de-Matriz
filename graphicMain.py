@@ -82,7 +82,7 @@ class CalculadoraMatrizes(tk.Tk):
         # Escolher a operação a ser realizada
         self.limpar_widgets()
         ttk.Label(self, text="Escolha a operação:").pack()
-        operacoes = ["soma", "subtração", "multiplicação"]
+        operacoes = ["soma", "subtração", "multiplicação", "divisão"]
         ttk.OptionMenu(self, self.operacao_var, self.operacao_var.get(), *operacoes).pack()
 
         ttk.Button(self, text="Calcular", command=self.calcular).pack()
@@ -93,7 +93,7 @@ class CalculadoraMatrizes(tk.Tk):
             if self.colunas_matriz1 != self.linhas_matriz2:
                 messagebox.showerror("Erro", "O número de colunas da primeira matriz deve ser igual ao número de linhas da segunda matriz para realizar a multiplicação.")
                 return
-        else:
+        elif self.operacao_var.get() == "divisão":
             if self.linhas_matriz1 != self.linhas_matriz2 or self.colunas_matriz1 != self.colunas_matriz2:
                 messagebox.showerror("Erro", "As matrizes devem ter o mesmo tamanho para realizar esta operação.")
                 return
@@ -105,6 +105,8 @@ class CalculadoraMatrizes(tk.Tk):
             resultado = self.subtrair_matrizes()
         elif self.operacao_var.get() == "multiplicação":
             resultado = self.multiplicar_matrizes()
+        elif self.operacao_var.get() == "divisão":
+            resultado = self.dividir_matrizes()
         else:
             resultado = None
 
@@ -113,9 +115,9 @@ class CalculadoraMatrizes(tk.Tk):
             ttk.Label(self, text="Resultado:").pack()
             for linha in resultado:
                 ttk.Label(self, text="[" + "  ".join(str(f) for f in linha) + "]").pack(pady=5, padx=10, anchor="center")
-            
+
             ttk.Label(self, text=f"Ordem da Matriz Resultante: {len(resultado)}x{len(resultado[0])}").pack(pady=5, padx=10, anchor="center")
-            
+
             ttk.Button(self, text="Calcular Novamente", command=self.reiniciar_calculadora).pack()
 
     def somar_matrizes(self):
@@ -147,6 +149,20 @@ class CalculadoraMatrizes(tk.Tk):
                     valor1 = Fraction(self.valores_matriz1[i][k].get())
                     valor2 = Fraction(self.valores_matriz2[k][j].get())
                     resultado[i][j] += valor1 * valor2
+        return resultado
+
+    def dividir_matrizes(self):
+        # Realiza a divisão das matrizes
+        resultado = [[Fraction(0) for _ in range(self.colunas_matriz1)] for _ in range(self.linhas_matriz1)]
+        for i in range(self.linhas_matriz1):
+            for j in range(self.colunas_matriz1):
+                valor1 = Fraction(self.valores_matriz1[i][j].get())
+                valor2 = Fraction(self.valores_matriz2[i][j].get())
+                # Verifica se o divisor é zero
+                if valor2 == 0:
+                    messagebox.showerror("Erro", "Divisão por zero não é permitida.")
+                    return None
+                resultado[i][j] = valor1 / valor2
         return resultado
 
     def limpar_widgets(self):
