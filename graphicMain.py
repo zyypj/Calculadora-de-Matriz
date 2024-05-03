@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
+from fractions import Fraction
 
 class CalculadoraMatrizes(tk.Tk):
     def __init__(self):
@@ -73,7 +74,7 @@ class CalculadoraMatrizes(tk.Tk):
             frame_linha = ttk.Frame(self)
             frame_linha.pack()
             for j in range(len(valores_matriz[0])):
-                entry = ttk.Entry(frame_linha, width=5)
+                entry = ttk.Entry(frame_linha, width=8)  # Increased width to accommodate fractions
                 entry.pack(side=tk.LEFT)
                 valores_matriz[i][j] = entry
 
@@ -111,36 +112,36 @@ class CalculadoraMatrizes(tk.Tk):
             self.limpar_widgets()
             ttk.Label(self, text="Resultado:").pack()
             for linha in resultado:
-                ttk.Label(self, text=linha, foreground="green").pack()
+                ttk.Label(self, text="[" + "  ".join(str(f) for f in linha) + "]").pack()
 
     def somar_matrizes(self):
         # Realiza a soma das matrizes
-        resultado = [[0 for _ in range(self.colunas_matriz1)] for _ in range(self.linhas_matriz1)]
+        resultado = [[Fraction(0) for _ in range(self.colunas_matriz1)] for _ in range(self.linhas_matriz1)]
         for i in range(self.linhas_matriz1):
             for j in range(self.colunas_matriz1):
-                valor1 = float(self.valores_matriz1[i][j].get())
-                valor2 = float(self.valores_matriz2[i][j].get())
+                valor1 = Fraction(self.valores_matriz1[i][j].get())
+                valor2 = Fraction(self.valores_matriz2[i][j].get())
                 resultado[i][j] = valor1 + valor2
         return resultado
 
     def subtrair_matrizes(self):
         # Realiza a subtração das matrizes
-        resultado = [[0 for _ in range(self.colunas_matriz1)] for _ in range(self.linhas_matriz1)]
+        resultado = [[Fraction(0) for _ in range(self.colunas_matriz1)] for _ in range(self.linhas_matriz1)]
         for i in range(self.linhas_matriz1):
             for j in range(self.colunas_matriz1):
-                valor1 = float(self.valores_matriz1[i][j].get())
-                valor2 = float(self.valores_matriz2[i][j].get())
+                valor1 = Fraction(self.valores_matriz1[i][j].get())
+                valor2 = Fraction(self.valores_matriz2[i][j].get())
                 resultado[i][j] = valor1 - valor2
         return resultado
 
     def multiplicar_matrizes(self):
         # Realiza a multiplicação das matrizes
-        resultado = [[0 for _ in range(self.colunas_matriz2)] for _ in range(self.linhas_matriz1)]
+        resultado = [[Fraction(0) for _ in range(self.colunas_matriz2)] for _ in range(self.linhas_matriz1)]
         for i in range(self.linhas_matriz1):
             for j in range(self.colunas_matriz2):
                 for k in range(self.colunas_matriz1):
-                    valor1 = float(self.valores_matriz1[i][k].get())
-                    valor2 = float(self.valores_matriz2[k][j].get())
+                    valor1 = Fraction(self.valores_matriz1[i][k].get())
+                    valor2 = Fraction(self.valores_matriz2[k][j].get())
                     resultado[i][j] += valor1 * valor2
         return resultado
 
