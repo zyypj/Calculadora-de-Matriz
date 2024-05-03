@@ -112,7 +112,11 @@ class CalculadoraMatrizes(tk.Tk):
             self.limpar_widgets()
             ttk.Label(self, text="Resultado:").pack()
             for linha in resultado:
-                ttk.Label(self, text="[" + "  ".join(str(f) for f in linha) + "]").pack()
+                ttk.Label(self, text="[" + "  ".join(str(f) for f in linha) + "]").pack(pady=5, padx=10, anchor="center")
+            
+            ttk.Label(self, text=f"Ordem da Matriz Resultante: {len(resultado)}x{len(resultado[0])}").pack(pady=5, padx=10, anchor="center")
+            
+            ttk.Button(self, text="Calcular Novamente", command=self.reiniciar_calculadora).pack()
 
     def somar_matrizes(self):
         # Realiza a soma das matrizes
@@ -149,6 +153,21 @@ class CalculadoraMatrizes(tk.Tk):
         # Limpa os widgets da interface
         for widget in self.winfo_children():
             widget.pack_forget()
+
+    def reiniciar_calculadora(self):
+        # Reinicia a calculadora, recriando os widgets iniciais
+        self.linhas_matriz1 = None
+        self.colunas_matriz1 = None
+        self.valores_matriz1 = None
+
+        self.linhas_matriz2 = None
+        self.colunas_matriz2 = None
+        self.valores_matriz2 = None
+
+        self.operacao_var.set("soma")
+
+        self.limpar_widgets()
+        self.criar_widgets()
 
 # Instancia a aplicação
 app = CalculadoraMatrizes()
