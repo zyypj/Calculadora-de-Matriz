@@ -25,6 +25,19 @@ class CalculadoraMatrizes(tk.Tk):
         self.criar_widgets()
 
     def criar_widgets(self):
+        # Botões para escolher a operação a ser realizada
+        ttk.Label(self, text="Escolha a operação:").pack()
+        operacoes = ["soma", "subtração", "multiplicação", "divisão"]
+        ttk.OptionMenu(self, self.operacao_var, self.operacao_var.get(), *operacoes).pack()
+
+        # Botões para escolher o tipo de operação
+        ttk.Button(self, text="Calcular Operações com Duas Matrizes", command=self.operacoes_com_duas_matrizes).pack()
+        ttk.Button(self, text="Identificar Tipo de Matriz", command=self.identificar_tipo_matriz).pack()
+
+    def operacoes_com_duas_matrizes(self):
+        # Limpa os widgets anteriores
+        self.limpar_widgets()
+
         # Escolher o tamanho da matriz 1
         ttk.Label(self, text="Tamanho da Matriz 1").pack()
         self.entr_linhas1 = ttk.Entry(self, width=5)
@@ -66,7 +79,7 @@ class CalculadoraMatrizes(tk.Tk):
         ttk.Label(self, text="Insira os valores da Matriz 2").pack()
         self.criar_campos_matriz(self.valores_matriz2)
 
-        ttk.Button(self, text="Próximo", command=self.escolher_operacao).pack()
+        ttk.Button(self, text="Calcular", command=self.calcular).pack()
 
     def criar_campos_matriz(self, valores_matriz):
         # Cria campos de entrada para os valores da matriz
@@ -74,18 +87,9 @@ class CalculadoraMatrizes(tk.Tk):
             frame_linha = ttk.Frame(self)
             frame_linha.pack()
             for j in range(len(valores_matriz[0])):
-                entry = ttk.Entry(frame_linha, width=8)  # Increased width to accommodate fractions
+                entry = ttk.Entry(frame_linha, width=8)
                 entry.pack(side=tk.LEFT)
                 valores_matriz[i][j] = entry
-
-    def escolher_operacao(self):
-        # Escolher a operação a ser realizada
-        self.limpar_widgets()
-        ttk.Label(self, text="Escolha a operação:").pack()
-        operacoes = ["soma", "subtração", "multiplicação", "divisão"]
-        ttk.OptionMenu(self, self.operacao_var, self.operacao_var.get(), *operacoes).pack()
-
-        ttk.Button(self, text="Calcular", command=self.calcular).pack()
 
     def calcular(self):
         # Verifica se as matrizes têm tamanhos compatíveis para a operação escolhida
@@ -184,6 +188,56 @@ class CalculadoraMatrizes(tk.Tk):
 
         self.limpar_widgets()
         self.criar_widgets()
+
+    def identificar_tipo_matriz(self):
+        # Limpa os widgets anteriores
+        self.limpar_widgets()
+
+        # Define o tamanho da matriz com base nos valores inseridos pelo usuário
+        ttk.Label(self, text="Número de linhas da matriz:").pack()
+        self.entr_linhas = ttk.Entry(self)
+        self.entr_linhas.pack()
+        ttk.Label(self, text="Número de colunas da matriz:").pack()
+        self.entr_colunas = ttk.Entry(self)
+        self.entr_colunas.pack()
+        ttk.Button(self, text="Confirmar", command=self.criar_matriz_identificar).pack()
+
+    def criar_matriz_identificar(self):
+        # Cria a matriz com base nos valores inseridos pelo usuário
+        linhas = int(self.entr_linhas.get())
+        colunas = int(self.entr_colunas.get())
+        valores = [[None for _ in range(colunas)] for _ in range(linhas)]
+
+        # Limpa os widgets anteriores
+        self.limpar_widgets()
+
+        # Cria os campos para inserção dos valores da matriz
+        ttk.Label(self, text="Insira os valores da Matriz").pack()
+        self.criar_campos_matriz_identificar(valores, linhas, colunas)
+
+        # Botão para identificar o tipo de matriz
+        ttk.Button(self, text="Identificar", command=lambda: self.identificar(valores, linhas, colunas)).pack()
+
+    def criar_campos_matriz_identificar(self, valores, linhas, colunas):
+        # Cria campos de entrada para os valores da matriz
+        for i in range(linhas):
+            frame_linha = ttk.Frame(self)
+            frame_linha.pack()
+            for j in range(colunas):
+                entry = ttk.Entry(frame_linha, width=8)
+                entry.pack(side=tk.LEFT)
+                valores[i][j] = entry
+
+    def identificar(self, valores, linhas, colunas):
+        # Verifica o tipo de matriz com base nos valores inseridos
+        if linhas == 1 and colunas == 1:
+            messagebox.showinfo("Tipo de Matriz", "A matriz é uma matriz escalar.")
+        elif linhas == 1 or colunas == 1:
+            messagebox.showinfo("Tipo de Matriz", "A matriz é uma matriz linha ou uma matriz coluna.")
+        elif all(all(Fraction(entry.get()) == 0 for entry in linha) for linha in valores):
+            messagebox.showinfo("Tipo de Matriz", "A matriz é uma matriz nula.")
+        else:
+            messagebox.showinfo("Tipo de Matriz", "A matriz é uma matriz comum.")
 
 # Instancia a aplicação
 app = CalculadoraMatrizes()
