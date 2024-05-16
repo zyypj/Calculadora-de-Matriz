@@ -60,6 +60,9 @@ class CalculadoraMatrizes(tk.Tk):
         ttk.Button(self, text="Próximo", command=self.definir_tamanho_matriz2).pack()
 
     def definir_tamanho_matriz2(self):
+        # Limpa os widgets anteriores
+        self.limpar_widgets()
+
         # Escolher o tamanho da matriz 2
         ttk.Label(self, text="Tamanho da Matriz 2").pack()
         self.entr_linhas2 = ttk.Entry(self, width=5)
@@ -232,12 +235,16 @@ class CalculadoraMatrizes(tk.Tk):
         # Verifica o tipo de matriz com base nos valores inseridos
         if linhas == 1 and colunas == 1:
             messagebox.showinfo("Tipo de Matriz", "A matriz é uma matriz escalar.")
+            ttk.Button(self, text="Calcular Novamente", command=self.reiniciar_calculadora).pack()
         elif linhas == 1 or colunas == 1:
             messagebox.showinfo("Tipo de Matriz", "A matriz é uma matriz linha ou uma matriz coluna.")
+            ttk.Button(self, text="Calcular Novamente", command=self.reiniciar_calculadora).pack()
         elif all(all(Fraction(entry.get()) == 0 for entry in linha) for linha in valores):
             messagebox.showinfo("Tipo de Matriz", "A matriz é uma matriz nula.")
+            ttk.Button(self, text="Calcular Novamente", command=self.reiniciar_calculadora).pack()
         else:
             messagebox.showinfo("Tipo de Matriz", "A matriz é uma matriz comum.")
+            ttk.Button(self, text="Calcular Novamente", command=self.reiniciar_calculadora).pack()
 
 # Instancia a aplicação
 app = CalculadoraMatrizes()
