@@ -182,7 +182,7 @@ class CalculadoraMatrizes(tk.Tk):
         tamanhos = ["2x2", "3x3"]
         self.tamanho_matriz_var = tk.StringVar(self)
         self.tamanho_matriz_var.set(tamanhos[0])
-        ttk.OptionMenu(self, self.tamanho_matriz_var, *tamanhos).pack()
+        ttk.OptionMenu(self, self.tamanho_matriz_var, self.tamanho_matriz_var.get(), *tamanhos).pack()
         ttk.Button(self, text="Confirmar", command=self.definir_tamanho_matriz_determinante).pack()
 
     def definir_tamanho_matriz_determinante(self):
