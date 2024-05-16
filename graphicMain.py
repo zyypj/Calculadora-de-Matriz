@@ -27,12 +27,13 @@ class CalculadoraMatrizes(tk.Tk):
     def criar_widgets(self):
         # Botões para escolher a operação a ser realizada
         ttk.Label(self, text="Escolha a operação:").pack()
-        operacoes = ["soma", "subtração", "multiplicação", "divisão"]
+        operacoes = ["soma", "subtração", "multiplicação", "divisão", "determinante"]
         ttk.OptionMenu(self, self.operacao_var, self.operacao_var.get(), *operacoes).pack()
 
         # Botões para escolher o tipo de operação
         ttk.Button(self, text="Calcular Operações com Duas Matrizes", command=self.operacoes_com_duas_matrizes).pack()
         ttk.Button(self, text="Identificar Tipo de Matriz", command=self.identificar_tipo_matriz).pack()
+        ttk.Button(self, text="Calcular Determinante", command=self.calcular_determinante).pack()
 
     def operacoes_com_duas_matrizes(self):
         # Limpa os widgets anteriores
@@ -171,6 +172,58 @@ class CalculadoraMatrizes(tk.Tk):
                     return None
                 resultado[i][j] = valor1 / valor2
         return resultado
+
+    def calcular_determinante(self):
+        # Limpa os widgets anteriores
+        self.limpar_widgets()
+
+        # Escolher o tamanho da matriz
+        ttk.Label(self, text="Escolha o tamanho da matriz (2x2 ou 3x3):").pack()
+        tamanhos = ["2x2", "3x3"]
+        self.tamanho_matriz_var = tk.StringVar(self)
+        self.tamanho_matriz_var.set(tamanhos[0])
+        ttk.OptionMenu(self, self.tamanho_matriz_var, *tamanhos).pack()
+        ttk.Button(self, text="Confirmar", command=self.definir_tamanho_matriz_determinante).pack()
+
+    def definir_tamanho_matriz_determinante(self):
+        tamanho = self.tamanho_matriz_var.get()
+        if tamanho == "2x2":
+            self.linhas_matriz = 2
+            self.colunas_matriz = 2
+        elif tamanho == "3x3":
+            self.linhas_matriz = 3
+            self.colunas_matriz = 3
+
+        self.valores_matriz = [[None for _ in range(self.colunas_matriz)] for _ in range(self.linhas_matriz)]
+
+        # Interface para inserir os valores da matriz
+        self.limpar_widgets()
+        ttk.Label(self, text="Insira os valores da Matriz").pack()
+        self.criar_campos_matriz(self.valores_matriz)
+
+        ttk.Button(self, text="Calcular Determinante", command=self.calcular_determinante_valores).pack()
+
+    def calcular_determinante_valores(self):
+        # Obtém os valores da matriz
+        matriz = [[Fraction(self.valores_matriz[i][j].get()) for j in range(self.colunas_matriz)] for i in range(self.linhas_matriz)]
+
+        # Calcula o determinante
+        if self.linhas_matriz == 2 and self.colunas_matriz == 2:
+            determinante = matriz[0][0] * matriz[1][1] - matriz[0][1] * matriz[1][0]
+        elif self.linhas_matriz == 3 and self.colunas_matriz == 3:
+            determinante = (matriz[0][0] * matriz[1][1] * matriz[2][2] +
+                            matriz[0][1] * matriz[1][2] * matriz[2][0] +
+                            matriz[0][2] * matriz[1][0] * matriz[2][1] -
+                            matriz[0][2] * matriz[1][1] * matriz[2][0] -
+                            matriz[0][0] * matriz[1][2] * matriz[2][1] -
+                            matriz[0][1] * matriz[1][0] * matriz[2][2])
+        else:
+            determinante = None
+
+        # Exibe o resultado
+        self.limpar_widgets()
+        ttk.Label(self, text=f"Determinante: {determinante}").pack()
+        ttk.Button(self, text="Calcular Novamente", command=self.reiniciar_calculadora).pack()
 
     def limpar_widgets(self):
         # Limpa os widgets da interface
