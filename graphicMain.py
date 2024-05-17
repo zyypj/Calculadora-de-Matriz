@@ -178,8 +178,8 @@ class CalculadoraMatrizes(tk.Tk):
         self.limpar_widgets()
 
         # Escolher o tamanho da matriz
-        ttk.Label(self, text="Escolha o tamanho da matriz (2x2 ou 3x3):").pack()
-        tamanhos = ["2x2", "3x3"]
+        ttk.Label(self, text="Escolha o tamanho da matriz (1x1, 2x2 ou 3x3):").pack()
+        tamanhos = ["1x1", "2x2", "3x3"]
         self.tamanho_matriz_var = tk.StringVar(self)
         self.tamanho_matriz_var.set(tamanhos[0])
         ttk.OptionMenu(self, self.tamanho_matriz_var, self.tamanho_matriz_var.get(), *tamanhos).pack()
@@ -187,7 +187,10 @@ class CalculadoraMatrizes(tk.Tk):
 
     def definir_tamanho_matriz_determinante(self):
         tamanho = self.tamanho_matriz_var.get()
-        if tamanho == "2x2":
+        if tamanho == "1x1":
+            self.linhas_matriz = 1
+            self.colunas_matriz = 1
+        elif tamanho == "2x2":
             self.linhas_matriz = 2
             self.colunas_matriz = 2
         elif tamanho == "3x3":
@@ -208,7 +211,9 @@ class CalculadoraMatrizes(tk.Tk):
         matriz = [[Fraction(self.valores_matriz[i][j].get()) for j in range(self.colunas_matriz)] for i in range(self.linhas_matriz)]
 
         # Calcula o determinante
-        if self.linhas_matriz == 2 and self.colunas_matriz == 2:
+        if self.linhas_matriz == 1 and self.colunas_matriz == 1:
+            determinante = matriz[0][0]
+        elif self.linhas_matriz == 2 and self.colunas_matriz == 2:
             determinante = matriz[0][0] * matriz[1][1] - matriz[0][1] * matriz[1][0]
         elif self.linhas_matriz == 3 and self.colunas_matriz == 3:
             determinante = (matriz[0][0] * matriz[1][1] * matriz[2][2] +
