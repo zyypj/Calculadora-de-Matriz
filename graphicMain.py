@@ -27,12 +27,11 @@ class CalculadoraMatrizes(tk.Tk):
     def criar_widgets(self):
         # Botões para escolher a operação a ser realizada
         ttk.Label(self, text="Escolha a operação:").pack()
-        operacoes = ["soma", "subtração", "multiplicação", "divisão", "determinante"]
+        operacoes = ["soma", "subtração", "multiplicação", "divisão"]
         ttk.OptionMenu(self, self.operacao_var, self.operacao_var.get(), *operacoes).pack()
 
         # Botões para escolher o tipo de operação
         ttk.Button(self, text="Calcular Operações com Duas Matrizes", command=self.operacoes_com_duas_matrizes).pack()
-        ttk.Button(self, text="Identificar Tipo de Matriz", command=self.identificar_tipo_matriz).pack()
         ttk.Button(self, text="Calcular Determinante", command=self.calcular_determinante).pack()
 
     def operacoes_com_duas_matrizes(self):
